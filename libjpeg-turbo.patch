@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c9b42813..b40f52c2 100644
+index c9b42813..20254981 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -42,34 +42,6 @@ if(MSVC OR CMAKE_C_SIMULATE_ID STREQUAL "MSVC")
@@ -49,7 +49,7 @@ index c9b42813..b40f52c2 100644
  boolean_number(ENABLE_STATIC)
  option(REQUIRE_SIMD
    "Generate a fatal error if SIMD extensions are not available for this platform (default is to fall back to a non-SIMD build)"
-@@ -1988,132 +1960,21 @@ endif()
+@@ -1988,132 +1960,19 @@ endif()
  
  endif() # WITH_TESTS
  
@@ -185,8 +185,6 @@ index c9b42813..b40f52c2 100644
 +add_library(JpegCodecCoreObj OBJECT ${TURBOJPEG_SOURCES})
 +if(TARGET simd)
 +    add_library(JpegCodecSimdObj ALIAS simd)
-+else()
-+    add_library(JpegCodecSimdObj OBJECT)
 +endif()
 +
 +target_include_directories(

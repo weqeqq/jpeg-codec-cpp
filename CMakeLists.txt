@@ -79,7 +79,7 @@ target_link_libraries(
     JpegCodecObj
     PUBLIC
     JpegCodecCoreObj
-    JpegCodecSimdObj
+    $<IF:$<TARGET_EXISTS:JpegCodecSimdObj>,JpegCodecSimdObj,>
 )
 foreach(target JpegCodecShared JpegCodecStatic)
     target_link_libraries(
@@ -87,6 +87,6 @@ foreach(target JpegCodecShared JpegCodecStatic)
         PUBLIC
             JpegCodecObj
             JpegCodecCoreObj
-            JpegCodecSimdObj
+            $<IF:$<TARGET_EXISTS:JpegCodecSimdObj>,JpegCodecSimdObj,>
     )
 endforeach()
