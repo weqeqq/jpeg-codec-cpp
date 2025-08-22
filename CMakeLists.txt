@@ -65,6 +65,7 @@ target_compile_definitions(
     PRIVATE
         JPEG_CODEC_BUILD
 )
+target_compile_features(JpegCodecObj PUBLIC cxx_std_17)
 target_sources(JpegCodecObj
     PUBLIC
     FILE_SET HEADERS BASE_DIRS
