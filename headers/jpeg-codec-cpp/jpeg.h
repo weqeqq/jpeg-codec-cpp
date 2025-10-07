@@ -84,13 +84,18 @@ enum class Sampling {  //
   S411,                ///< 4:1:1 sampling
   S441                 ///< 4:4:1 sampling
 };
+
+JPEG_CODEC_EXPORT std::vector<std::uint8_t> Decode(  //
+    const std::uint8_t *data,                        //
+    std::size_t length,                              //
+    std::size_t &row_count,                          //
+    std::size_t &column_count,                       //
+    Color color,                                     //
+    Sampling &sampling);                             //
+
 /**
- * @brief Type alias for byte container using std::vector<std::uint8_t>
- */
-using ByteContainer = std::vector<std::uint8_t>;
-/* clang-format off */
-/**
- * @brief Decode a JPEG image with specified color format and sampling information
+ * @brief Decode a JPEG image with specified color format and sampling
+ * information
  * @param data Input JPEG data as a byte container
  * @param row_count Output parameter for image height in pixels
  * @param column_count Output parameter for image width in pixels
@@ -99,13 +104,25 @@ using ByteContainer = std::vector<std::uint8_t>;
  * @return Decoded image data as a byte container
  * @throws DecodeError if decoding fails
  */
-JPEG_CODEC_EXPORT ByteContainer Decode(
-  const ByteContainer &data,
-  int                 &row_count,
-  int                 &column_count,
-  Color               color,
-  Sampling            &sampling
-);
+inline std::vector<std::uint8_t> Decode(    //
+    const std::vector<std::uint8_t> &data,  //
+    std::size_t &row_count,                 //
+    std::size_t &column_count,              //
+    Color color,                            //
+    Sampling &sampling) {
+  return Decode(data.data(), data.size(), row_count, column_count, color,
+                sampling);
+}
+
+inline std::vector<std::uint8_t> Decode(  //
+    const std::uint8_t *data,             //
+    std::size_t length,                   //
+    std::size_t &row_count,               //
+    std::size_t &column_count) {
+  Sampling sampling;
+  return Decode(data, length, row_count, column_count, Color::Rgba, sampling);
+}
+
 /**
  * @brief Decode a JPEG image with default settings
  * @param data Input JPEG data as a byte container
@@ -114,14 +131,22 @@ JPEG_CODEC_EXPORT ByteContainer Decode(
  * @return Decoded image data as a byte container
  * @throws DecodeError if decoding fails
  */
-inline ByteContainer Decode(
-  const ByteContainer &data,
-  int                 &row_count,
-  int                 &column_count
-) {
+inline std::vector<std::uint8_t> Decode(    //
+    const std::vector<std::uint8_t> &data,  //
+    std::size_t &row_count,                 //
+    std::size_t &column_count) {
   Sampling sampling;
   return Decode(data, row_count, column_count, Color::Rgba, sampling);
 }
+
+JPEG_CODEC_EXPORT std::vector<std::uint8_t> Encode(  //
+    const std::uint8_t *data,                        //
+    std::size_t row_count,                           //
+    std::size_t column_count,                        //
+    Color color,                                     //
+    Sampling sampling,                               //
+    int quality);
+
 /**
  * @brief Encode image data to JPEG format with specified parameters
  * @param data Input image data as a byte container
@@ -133,14 +158,24 @@ inline ByteContainer Decode(
  * @return Encoded JPEG data as a byte container
  * @throws EncodeError if encoding fails
  */
-JPEG_CODEC_EXPORT ByteContainer Encode(
-  const ByteContainer &data,
-  int                  row_count,
-  int                  column_count,
-  Color                color,
-  Sampling             sampling,
-  int                  quality
-);
+inline std::vector<std::uint8_t> Encode(    //
+    const std::vector<std::uint8_t> &data,  //
+    std::size_t row_count,                  //
+    std::size_t column_count,               //
+    Color color,                            //
+    Sampling sampling,                      //
+    int quality) {
+  return Encode(data.data(), row_count, column_count, color, sampling, quality);
+}
+
+inline std::vector<std::uint8_t> Encode(  //
+    const std::uint8_t *data,             //
+    std::size_t row_count,                //
+    std::size_t column_count) {
+  return Encode(data, row_count, column_count, Color::Rgba, Sampling::S444,
+                100);
+}
+
 /**
  * @brief Encode image data to JPEG format with default settings
  * @param data Input image data as a byte container
@@ -149,19 +184,12 @@ JPEG_CODEC_EXPORT ByteContainer Encode(
  * @return Encoded JPEG data as a byte container
  * @throws EncodeError if encoding fails
  */
-inline ByteContainer Encode(
-  const ByteContainer &data,
-  int                  row_count,
-  int                  column_count
-) {
-  return Encode(
-    data,
-    row_count,
-    column_count,
-    Color::Rgba,
-    Sampling::S444,
-    100
-  );
+inline std::vector<std::uint8_t> Encode(    //
+    const std::vector<std::uint8_t> &data,  //
+    std::size_t row_count,                  //
+    std::size_t column_count) {
+  return Encode(data, row_count, column_count, Color::Rgba, Sampling::S444,
+                100);
 }
-/* clang-format on */
+
 }  // namespace JpegCodec

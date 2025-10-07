@@ -58,6 +58,15 @@ endif()
 add_library(JpegCodecObj    OBJECT)
 add_library(JpegCodecShared SHARED)
 add_library(JpegCodecStatic STATIC)
+
+add_library(JpegCodec::Shared ALIAS JpegCodecShared)
+add_library(JpegCodec::Static ALIAS JpegCodecStatic)
+
+if(BUILD_SHARED_LIBS)
+    add_library(JpegCodec::JpegCodec ALIAS JpegCodecShared)
+else()
+    add_library(JpegCodec::JpegCodec ALIAS JpegCodecStatic)
+endif()
 target_compile_definitions(
     JpegCodecShared
     PUBLIC
